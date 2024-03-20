@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -eu
 
 PWD=$(pwd)
@@ -21,4 +20,6 @@ if [ "${BUILD_RIGHT}" = true ]; then
     grep -vE '(^#|^$)' build/right/zephyr/.config
     # Rename zmk.uf2
     cp build/right/zephyr/zmk.uf2 "./firmware/${TIMESTAMP}-${COMMIT}-right.uf2"
+
+    cat "./firmware/${TIMESTAMP}-${COMMIT}-left.uf2" "./firmware/${TIMESTAMP}-${COMMIT}-right.uf2" > "./firmware/combined-${TIMESTAMP}-${COMMIT}.uf2"
 fi
