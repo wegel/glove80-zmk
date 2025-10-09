@@ -126,8 +126,8 @@
             &kp N1        &kp N2        &kp N3        &kp N4        &kp N5        &kp N6        &kp N7        &kp N8        &kp N9        &kp N0        &trans
             &trans        &kp Q         &kp W         &kp E         &kp R         &kp T         &kp Y         &kp U         &kp I         &kp O         &kp P         &kp MINUS
             &kp EQUAL     &home_mod LGUI A    &home_mod LALT S    &home_mod LCTL D    &home_mod LSFT F    &kp G         &kp H         &home_mod RSFT J    &home_mod RCTL K    &home_mod RALT L    &home_mod RGUI SEMI &kp SQT
-            &mo LOWER     &kp Z         &kp X         &kp C         &kp V         &kp B         &kp ESC       &kp LPAR      &kp RPAR      &kp HOME      &kp END       &kp ENTER     &kp N         &kp M         &kp COMMA     &kp DOT       &kp FSLH      &mo LOWER
-            &magic MAGIC 0 &kp BSLH     &kp LBKT      &kp RBKT      &kp GRAVE     &thumb_lt CURSOR BACKSPACE &kp DELETE &kp INSERT    &trans        &kp TAB       &thumb_lt SYMBOL SPACE &kp PG_UP     &kp UP        &kp DOWN      &kp PG_DN     &magic MAGIC 0
+            &mo LOWER     &kp Z         &kp X         &kp C         &kp V         &kp B         &kp DELETE    &kp LPAR      &kp RPAR      &kp HOME      &kp END       &kp TAB        &kp N         &kp M         &kp COMMA     &kp DOT       &kp FSLH      &mo LOWER
+            &magic MAGIC 0 &kp BSLH     &kp LBKT      &kp RBKT      &kp GRAVE     &thumb_lt CURSOR BACKSPACE &kp ESC    &kp INSERT    &trans        &kp ENTER     &thumb_lt SYMBOL SPACE &kp PG_UP     &kp UP        &kp DOWN      &kp PG_DN     &magic MAGIC 0
             >;
         };
 
