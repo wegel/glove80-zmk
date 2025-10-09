@@ -14,15 +14,16 @@
 #define HYPER LC(LS(LG(LALT)))
 
 // layers
-#define DEFAULT 0
-#define LOWER 1
-#define MAGIC 2
-#define FACTORY_TEST 3
+#define QWERTY 0
+#define CUSTOM 1
+#define LOWER 2
+#define MAGIC 3
+#define SYMBOL 4
+#define CURSOR 5
+#define DEFAULT QWERTY
 
 / {
     behaviors {
-        // For the "layer" key, it'd nice to be able to use it as either a shift or a toggle.
-        // Configure it as a tap dance, so the first tap (or hold) is a &mo and the second tap is a &to
         layer_td: tap_dance_0 {
             compatible = "zmk,behavior-tap-dance";
             label = "LAYER_TAP_DANCE";
@@ -38,6 +39,27 @@
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
             bindings = <&mo>, <&rgb_ug_status_macro>;
+        };
+
+
+        home_mod: home_row_mod {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOME_ROW_MOD";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <180>;
+            quick-tap-ms = <150>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
+        thumb_lt: thumb_layer_tap_repeat {
+            compatible = "zmk,behavior-hold-tap";
+            label = "THUMB_LAYER_TAP";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
         };
     };
 
@@ -85,12 +107,31 @@
                 = <&out OUT_BLE>,
                   <&bt BT_SEL 3>;
         };
+        dot_dot: dot_dot_macro {
+            label = "DOT_DOT";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp DOT>;
+        };
+
     };
 
     keymap {
         compatible = "zmk,keymap";
 
-        default_layer {
+        qwerty_layer {
+            // Base QWERTY layout with homerow mods and thumb layer-taps
+            bindings = <
+            &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans
+            &kp N1        &kp N2        &kp N3        &kp N4        &kp N5        &kp N6        &kp N7        &kp N8        &kp N9        &kp N0        &trans
+            &trans        &kp Q         &kp W         &kp E         &kp R         &kp T         &kp Y         &kp U         &kp I         &kp O         &kp P         &kp MINUS
+            &kp EQUAL     &home_mod LGUI A    &home_mod LALT S    &home_mod LCTL D    &home_mod LSFT F    &kp G         &kp H         &home_mod RSFT J    &home_mod RCTL K    &home_mod RALT L    &home_mod RGUI SEMI &kp SQT
+            &mo LOWER     &kp Z         &kp X         &kp C         &kp V         &kp B         &kp ESC       &kp LPAR      &kp RPAR      &kp HOME      &kp END       &kp ENTER     &kp N         &kp M         &kp COMMA     &kp DOT       &kp FSLH      &mo LOWER
+            &magic MAGIC 0 &kp BSLH     &kp LBKT      &kp RBKT      &kp GRAVE     &thumb_lt CURSOR BACKSPACE &kp DELETE &kp INSERT    &trans        &kp TAB       &thumb_lt SYMBOL SPACE &kp PG_UP     &kp UP        &kp DOWN      &kp PG_DN     &magic MAGIC 0
+            >;
+        };
+
+        wegel_layer {
             // ---------------------------------------------------------------------------------------------------------------------------------
             // |  F1   |  F2 |  F3 |  F4  |  F5  |                                                               |  F6   |  F7   |  F8  |   F9  |  F10 |
             // |       |     |     |      |      |      |                                                 |      |       |       |      |       |      |
@@ -127,19 +168,31 @@
             &none             &rgb_ug RGB_SPI     &rgb_ug RGB_SAI &rgb_ug RGB_HUI &rgb_ug RGB_BRI &rgb_ug RGB_TOG                                                                      &none      &none      &none      &none      &none      &none
             &bootloader       &rgb_ug RGB_SPD     &rgb_ug RGB_SAD &rgb_ug RGB_HUD &rgb_ug RGB_BRD &rgb_ug RGB_EFF                                                                      &none      &none      &none      &none      &none      &bootloader
             &sys_reset        &none               &none           &none           &none           &none           &bt_2     &bt_3     &none            &none     &none     &none       &none      &none      &none      &none      &none      &sys_reset
-            &none             &none               &none           &none           &none                           &bt_0     &bt_1     &out OUT_USB     &none     &none     &none                  &none      &none      &none      &none      &to FACTORY_TEST
+            &none             &none               &none           &none           &none                           &bt_0     &bt_1     &out OUT_USB     &none     &none     &none                  &none      &none      &none      &none      &none
+            >;
+        };
+        symbol_layer {
+            bindings = <
+            &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &kp GRAVE
+            &kp RBKT      &kp LPAR      &kp RPAR      &kp SEMI      &kp DOT       &trans        &trans        &trans        &trans        &trans        &trans
+            &kp LBKT      &kp EXCL      &kp LBRC      &kp RBRC      &kp COMMA     &kp QMARK     &kp GRAVE     &sk RSFT      &sk RCTL      &sk RALT      &sk RGUI     &trans
+            &kp HASH      &kp CARET     &kp EQUAL     &kp UNDER     &kp DLLR      &kp STAR      &kp DQT       &kp BSPC      &kp TAB       &kp SPACE     &kp RET      &trans
+            &kp TILDE     &kp LT        &kp PIPE      &kp MINUS     &kp GT        &kp FSLH      &kp BSLH      &kp DOT       &kp STAR      &trans        &trans        &trans        &kp SQT       &kp DEL       &kp LS(TAB)   &kp INS       &kp ESC       &trans
+            &dot_dot      &kp AMPS      &kp SQT       &kp DQT       &kp PLUS      &kp PRCNT     &kp COLON     &kp AT        &trans        &trans        &tog SYMBOL  &trans        &trans        &trans        &trans        &trans
             >;
         };
 
-        factory_test_layer {
+        cursor_layer {
             bindings = <
-            &kp N0   &kp N6   &kp N2   &kp N8   &kp N4                                                                              &kp N4   &kp N8   &kp N2   &kp N6   &kp N0
-            &kp N1   &kp N7   &kp N3   &kp N9   &kp N5   &kp N0                                                            &kp N0   &kp N5   &kp N9   &kp N3   &kp N7   &kp N1
-            &kp N2   &kp N8   &kp N4   &kp N0   &kp N6   &kp N1                                                            &kp N1   &kp N6   &kp N0   &kp N4   &kp N8   &kp N2
-            &kp N3   &kp N9   &kp N5   &kp N1   &kp N7   &kp N2                                                            &kp N2   &kp N7   &kp N1   &kp N5   &kp N9   &kp N3
-            &kp N4   &kp N0   &kp N6   &kp N2   &kp N8   &kp N3   &kp N4   &kp N5   &kp N6      &kp N6   &kp N5   &kp N4   &kp N3   &kp N8   &kp N2   &kp N6   &kp N0   &kp N4
-            &kp N5   &kp N1   &kp N7   &kp N3   &kp N9            &kp N7   &kp N8   &kp N9      &kp N9   &kp N8   &kp N7            &kp N9   &kp N3   &kp N7   &kp N1   &kp N5
+            &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans        &trans
+            &kp ESC       &kp INS       &kp LS(TAB)   &kp DEL       &trans        &trans        &trans        &trans        &trans        &trans        &trans
+            &trans        &kp RET       &kp SPACE     &kp TAB       &kp BSPC      &kp LC(X)     &kp LC(X)     &kp LS(TAB)   &kp LC(Z)     &kp LC(Y)     &kp TAB       &trans
+            &sk LSHFT     &kp LGUI      &kp LALT      &kp LCTL      &kp LSFT      &kp LC(C)     &kp LC(C)     &kp LEFT      &kp UP        &kp DOWN      &kp RIGHT     &sk LSHFT
+            &kp LC(L)     &kp LC(A)     &kp LS(HOME)  &kp LC(LS(RIGHT)) &kp LC(F) &kp LC(V) &kp LS(TAB) &kp TAB      &trans        &kp ESC       &kp LS(DOWN) &kp LC(LS(RIGHT)) &kp LC(V) &kp HOME &kp PG_UP &kp PG_DN &kp END &kp LC(L)
+            &kp LC(K)     &kp LC(Z)     &kp LC(Y)     &kp LC(LS(G))  &kp LC(G)     &tog CURSOR   &trans        &trans        &kp LC(A)     &kp LS(HOME)  &kp LC(LS(RIGHT)) &kp LC(F) &kp LC(LS(G)) &kp LC(G) &kp LC(H) &kp LC(K)
             >;
         };
+
+
     };
 };
